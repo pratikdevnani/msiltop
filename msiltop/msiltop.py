@@ -898,15 +898,15 @@ class FluidTopApp(App):
 @click.option('--show_cores', is_flag=True, default=False,
               help='Show per-core CPU usage charts')
 def main(interval, theme, avg, max_count, show_cores):
-    """fluidtop: Performance monitoring CLI tool for Apple Silicon"""
+    """msiltop: Performance monitoring CLI tool for Apple Silicon"""
     return _main_logic(interval, theme, avg, max_count, show_cores=show_cores)
 
 
 def _main_logic(interval, theme, avg, max_count, show_cores=False):
     """Main logic using Textual app"""
-    print("\nFLUIDTOP - Performance monitoring CLI tool for Apple Silicon")
-    print("Get help at `https://github.com/FluidInference/fluidtop`")
-    print("P.S. You are recommended to run FLUIDTOP with `sudo fluidtop`\n")
+    print("\nMSILTOP - Performance monitoring CLI tool for Apple Silicon")
+    print("Get help at `https://github.com/pratikdevnani/msiltop`")
+    print("P.S. You are recommended to run MSILTOP with `sudo msiltop`\n")
     
     # Create and run the Textual app
     app = FluidTopApp(interval, theme, avg, max_count, show_cores=show_cores)

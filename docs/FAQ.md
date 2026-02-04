@@ -79,29 +79,29 @@ Data export capabilities (CSV, JSON) are planned for a future release. Currently
 
 Make sure you're running FluidTop with sudo privileges:
 ```bash
-sudo fluidtop
+sudo msiltop
 ```
 
 ### The display appears corrupted or scrambled
 
 Try these solutions:
 1. Resize your terminal window to be larger
-2. Use a different color theme: `sudo fluidtop --color 0`
+2. Use a different color theme: `sudo msiltop --color 0`
 3. Clear your terminal: `clear` before running FluidTop
-4. Update to the latest version: `uv tool install fluidtop@latest -U`
+4. Update to the latest version: `uv tool install msiltop@latest -U`
 
 ### FluidTop crashes or becomes unresponsive
 
 This can happen during long monitoring sessions. Use the `--max_count` option to automatically restart:
 ```bash
-sudo fluidtop --max_count 1000
+sudo msiltop --max_count 1000
 ```
 
 ### High CPU usage from FluidTop itself
 
 Reduce the refresh rate to lower system impact:
 ```bash
-sudo fluidtop --interval 2.0
+sudo msiltop --interval 2.0
 ```
 
 ## Migration & Compatibility
@@ -121,4 +121,4 @@ Yes, FluidTop can run alongside other monitoring tools like htop, Activity Monit
 
 ---
 
-**Need more help?** Check out the [main README](../README.md) or [submit an issue](https://github.com/FluidInference/fluidtop/issues) on GitHub. 
+**Need more help?** Check out the [main README](../README.md) or [submit an issue](https://github.com/pratikdevnani/msiltop/issues) on GitHub.

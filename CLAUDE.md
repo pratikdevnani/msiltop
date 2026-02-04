@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-fluidtop is a Python-based performance monitoring CLI tool for Apple Silicon Macs, inspired by `nvtop`. It provides real-time monitoring of CPU, GPU, ANE (Apple Neural Engine), memory, and power consumption using macOS's built-in `powermetrics` utility.
+msiltop is a Python-based performance monitoring CLI tool for Apple Silicon Macs, inspired by `nvtop`. It provides real-time monitoring of CPU, GPU, ANE (Apple Neural Engine), memory, and power consumption using macOS's built-in `powermetrics` utility.
 
 **Important**: This tool only works on Apple Silicon Macs and requires `sudo` privileges to access `powermetrics`.
 
@@ -12,9 +12,9 @@ fluidtop is a Python-based performance monitoring CLI tool for Apple Silicon Mac
 
 ### Core Components
 
-- **`fluidtop/fluidtop.py`**: Main application entry point with UI rendering using the `textual` library
-- **`fluidtop/utils.py`**: System utilities for data collection and `powermetrics` process management
-- **`fluidtop/parsers.py`**: Data parsing functions for `powermetrics` output (plist format)
+- **`msiltop/msiltop.py`**: Main application entry point with UI rendering using the `textual` library
+- **`msiltop/utils.py`**: System utilities for data collection and `powermetrics` process management
+- **`msiltop/parsers.py`**: Data parsing functions for `powermetrics` output (plist format)
 - **`setup.py`**: Standard Python package configuration
 
 ### Key Architecture Patterns
@@ -22,7 +22,7 @@ fluidtop is a Python-based performance monitoring CLI tool for Apple Silicon Mac
 - **Data Collection Pipeline**: `powermetrics` subprocess → plist parsing → metric extraction → UI display
 - **Hardware Detection**: Dynamic SoC identification (M1, M1 Pro/Max/Ultra, M2) with hardcoded TDP values
 - **Real-time Display**: Terminal UI using `textual` library with gauges and charts
-- **Temporary File Management**: Uses `/tmp/fluidtop_powermetrics*` files for data exchange
+- **Temporary File Management**: Uses `/tmp/msiltop_powermetrics*` files for data exchange
 
 ### Hardware Support Matrix
 
@@ -46,14 +46,14 @@ The application includes hardcoded power specifications for different Apple Sili
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Quick start - no installation needed, just run:
-sudo uv run fluidtop
+sudo uv run msiltop
 
 # For development work:
 # Install in development mode
 uv pip install -e .
 
 # Install from PyPI
-uv pip install fluidtop
+uv pip install msiltop
 
 # Create and activate virtual environment (optional)
 uv venv
@@ -70,7 +70,7 @@ uv pip install -e .
 pip install -e .
 
 # Install from PyPI
-pip install fluidtop
+pip install msiltop
 ```
 
 ### Running the Application
@@ -78,28 +78,28 @@ pip install fluidtop
 #### Using uv run (Recommended)
 ```bash
 # Run directly with uv (automatically handles dependencies)
-sudo uv run fluidtop
+sudo uv run msiltop
 
 # Run with options
-sudo uv run fluidtop --interval 2 --color 5 --avg 60 --show_cores
+sudo uv run msiltop --interval 2 --color 5 --avg 60 --show_cores
 
 # Alternative: run the module directly
-sudo uv run -m fluidtop.fluidtop
+sudo uv run -m msiltop.msiltop
 
 # Without sudo (will prompt for password during execution)
-uv run fluidtop
+uv run msiltop
 ```
 
 #### Traditional method
 ```bash
 # Recommended usage (avoids password prompt during execution)
-sudo fluidtop
+sudo msiltop
 
 # Alternative (will prompt for password)
-fluidtop
+msiltop
 
 # With options
-fluidtop --interval 2 --color 5 --avg 60 --show_cores
+msiltop --interval 2 --color 5 --avg 60 --show_cores
 ```
 
 ### Available Command Line Options
@@ -155,10 +155,10 @@ twine upload dist/*
 - **Options**: All command-line options use Click decorators (@click.option)
 - **Help System**: Automatic help generation with Click's built-in --help
 - **Parameter Validation**: Click handles type validation and error reporting
-- **Entry Point**: `fluidtop.fluidtop:main` decorated with @click.command()
+- **Entry Point**: `msiltop.msiltop:main` decorated with @click.command()
 
 ### File Structure Notes
-- Entry point: `fluidtop.fluidtop:main` (defined in pyproject.toml and setup.py)
+- Entry point: `msiltop.msiltop:main` (defined in pyproject.toml and setup.py)
 - No test suite present in codebase
 - Dependencies defined in both pyproject.toml and setup.py for compatibility
 - Uses plist format for powermetrics data exchange
@@ -175,7 +175,7 @@ twine upload dist/*
 ## Terminal Compatibility
 
 ### Ghostty Terminal Support
-fluidtop includes enhanced support for [Ghostty](https://ghostty.org/) terminal emulator:
+msiltop includes enhanced support for [Ghostty](https://ghostty.org/) terminal emulator:
 - **Early Compatibility Detection**: Detects Ghostty before importing terminal libraries to prevent compatibility issues
 - **Automatic Terminal Mapping**: Maps `xterm-ghostty` and `ghostty` TERM values to `xterm-256color` for maximum compatibility
 - **True Color Support**: Automatically enables truecolor support for enhanced visual quality
@@ -188,12 +188,12 @@ The application automatically detects when running in Ghostty, applies compatibi
 ## Troubleshooting
 
 ### Common Issues
-- **Permission denied**: Run with `sudo fluidtop`
+- **Permission denied**: Run with `sudo msiltop`
 - **Not compatible**: Only works on Apple Silicon Macs with macOS Monterey+
 - **Thermal throttling**: Displayed in power chart title when detected
 - **Incomplete data**: Application handles parsing errors gracefully with fallback logic
 
 ### Debug Information
-- Temporary files: `/tmp/fluidtop_powermetrics*`
+- Temporary files: `/tmp/msiltop_powermetrics*`
 - Process management: Uses subprocess.Popen for powermetrics
 - Error handling: Try/except blocks for plist parsing with fallback to previous data

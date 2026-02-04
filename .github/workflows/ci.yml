@@ -38,14 +38,14 @@ jobs:
           echo "🧪 Testing package functionality..."
 
           # Test help command works
-          sudo uv run fluidtop --help
+          sudo uv run msiltop --help
           echo "✅ Help command works"
 
           # Test package can be imported
-          uv run python -c "import fluidtop.fluidtop; print('✅ Package imports successfully')"
+          uv run python -c "import msiltop.msiltop; print('✅ Package imports successfully')"
 
           # Test CLI entry point exists
-          if command -v fluidtop >/dev/null 2>&1 || uv run which fluidtop >/dev/null 2>&1; then
+          if command -v msiltop >/dev/null 2>&1 || uv run which msiltop >/dev/null 2>&1; then
             echo "✅ CLI entry point found"
           else
             echo "⚠️  CLI entry point not in PATH (expected in development)"
@@ -63,7 +63,7 @@ jobs:
           pip install dist/*.whl
 
           # Test import in clean environment
-          python -c "import fluidtop.fluidtop; print('✅ Wheel installs and imports correctly')"
+          python -c "import msiltop.msiltop; print('✅ Wheel installs and imports correctly')"
 
           # Clean up
           deactivate

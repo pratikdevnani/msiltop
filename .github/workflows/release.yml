@@ -114,10 +114,10 @@ jobs:
           echo "🧪 Testing package build..."
 
           # Test that the package can be imported and help works
-          uv run fluidtop --help
+          uv run msiltop --help
 
           # Verify the version in the built package
-          if ls dist/fluidtop-${NEW_VERSION}-*.whl 1> /dev/null 2>&1; then
+          if ls dist/msiltop-${NEW_VERSION}-*.whl 1> /dev/null 2>&1; then
             echo "✅ Wheel file with correct version found"
           else
             echo "❌ Wheel file with version $NEW_VERSION not found"
@@ -125,7 +125,7 @@ jobs:
             exit 1
           fi
 
-          if ls dist/fluidtop-${NEW_VERSION}.tar.gz 1> /dev/null 2>&1; then
+          if ls dist/msiltop-${NEW_VERSION}.tar.gz 1> /dev/null 2>&1; then
             echo "✅ Source distribution with correct version found"
           else
             echo "❌ Source distribution with version $NEW_VERSION not found"  
@@ -148,7 +148,7 @@ jobs:
 
           # Check if package is available on PyPI
           for i in {1..10}; do
-            if pip index versions fluidtop | grep -q "$NEW_VERSION"; then
+            if pip index versions msiltop | grep -q "$NEW_VERSION"; then
               echo "✅ Package version $NEW_VERSION found on PyPI"
               echo "pypi_verified=true" >> $GITHUB_OUTPUT
               break
@@ -174,11 +174,11 @@ jobs:
           source test_env/bin/activate
 
           # Install from PyPI
-          pip install "fluidtop==$NEW_VERSION"
+          pip install "msiltop==$NEW_VERSION"
 
           # Test that it works
-          echo "Testing fluidtop --help (without sudo in CI)"
-          python -c "import fluidtop.fluidtop as ft; print('✅ Package imports successfully')"
+          echo "Testing msiltop --help (without sudo in CI)"
+          python -c "import msiltop.msiltop as mt; print('✅ Package imports successfully')"
 
           # Clean up
           deactivate
@@ -207,23 +207,23 @@ jobs:
         if: steps.git_tag.outputs.git_tagged == 'true'
         run: |
           cat > release_notes.md << EOF
-          # FluidTop v$NEW_VERSION
+          # MSILTOP v$NEW_VERSION
 
           ## 🚀 What's New
 
-          This release includes improvements and updates to FluidTop.
+          This release includes improvements and updates to MSILTOP.
 
           ## 📦 Installation
 
           \`\`\`bash
           # Install or upgrade via pip
-          pip install fluidtop --upgrade
+          pip install msiltop --upgrade
 
           # Install or upgrade via UV  
-          uv add fluidtop
+          uv add msiltop
 
           # Run directly with UV (on macOS, use sudo)
-          sudo uv run fluidtop
+          sudo uv run msiltop
           \`\`\`
 
           ## 🔧 System Requirements
@@ -235,13 +235,13 @@ jobs:
 
           ## 🏷️ Package Information
 
-          - **PyPI:** https://pypi.org/project/fluidtop/$NEW_VERSION/
-          - **Wheel:** \`fluidtop-$NEW_VERSION-py3-none-any.whl\`
-          - **Source:** \`fluidtop-$NEW_VERSION.tar.gz\`
+          - **PyPI:** https://pypi.org/project/msiltop/$NEW_VERSION/
+          - **Wheel:** \`msiltop-$NEW_VERSION-py3-none-any.whl\`
+          - **Source:** \`msiltop-$NEW_VERSION.tar.gz\`
 
           ---
 
-          **Full Changelog:** https://github.com/FluidInference/fluidtop/compare/v$(git describe --tags --abbrev=0 HEAD~1)...v$NEW_VERSION
+          **Full Changelog:** https://github.com/pratikdevnani/msiltop/compare/v$(git describe --tags --abbrev=0 HEAD~1)...v$NEW_VERSION
           EOF
 
       - name: 🎉 Create GitHub Release
@@ -249,7 +249,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.NEW_VERSION }}
-          name: "FluidTop v${{ env.NEW_VERSION }}"
+          name: "MSILTOP v${{ env.NEW_VERSION }}"
           body_path: release_notes.md
           files: |
             dist/*.whl
@@ -277,9 +277,9 @@ jobs:
           echo "- [x] Created GitHub release" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
-          echo "- **PyPI Package:** https://pypi.org/project/fluidtop/$NEW_VERSION/" >> $GITHUB_STEP_SUMMARY
-          echo "- **GitHub Release:** https://github.com/FluidInference/fluidtop/releases/tag/v$NEW_VERSION" >> $GITHUB_STEP_SUMMARY
-          echo "- **Install Command:** \`pip install fluidtop==$NEW_VERSION\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **PyPI Package:** https://pypi.org/project/msiltop/$NEW_VERSION/" >> $GITHUB_STEP_SUMMARY
+          echo "- **GitHub Release:** https://github.com/pratikdevnani/msiltop/releases/tag/v$NEW_VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "- **Install Command:** \`pip install msiltop==$NEW_VERSION\`" >> $GITHUB_STEP_SUMMARY
 
       - name: ❌ Failure Summary
         if: failure()

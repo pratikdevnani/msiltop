@@ -1,6 +1,6 @@
-# FluidTop - MacOS Performance Monitor for Local AI
+# MSILTOP - MacOS Performance Monitor for Local AI
 
-[![PyPI version](https://badge.fury.io/py/fluidtop.svg)](https://badge.fury.io/py/fluidtop)
+[![PyPI version](https://badge.fury.io/py/msiltop.svg)](https://badge.fury.io/py/msiltop)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![macOS](https://img.shields.io/badge/macOS-Monterey%2B-green.svg)](https://www.apple.com/macos/)
 [![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-M1%2FM2%2FM3%2FM4-orange.svg)](https://www.apple.com/mac/)
@@ -8,7 +8,7 @@
 
 **Real-time macOS hardware performance monitoring CLI tool for Apple Silicon Macs (M1/M2/M3/M4+) with AI workload focus**
 
-FluidTop is a Python-based `nvtop`-inspired command line tool specifically designed for Apple Silicon Macs. This enhanced and actively maintained fork of the original [asitop](https://github.com/tlkh/asitop) project provides comprehensive hardware monitoring with additional features, support for newer Apple Silicon chips, and optimizations for modern terminal emulators including Ghostty.
+MSILTOP is a Python-based `nvtop`-inspired command line tool specifically designed for Apple Silicon Macs. This enhanced and actively maintained fork of the original [asitop](https://github.com/tlkh/asitop) project provides comprehensive hardware monitoring with additional features, support for newer Apple Silicon chips, and optimizations for modern terminal emulators including Ghostty.
 
 
 ## 📦 Installation & Usage
@@ -21,35 +21,35 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 ```bash
-# Run FluidTop directly without installation (one-time usage)
-sudo uvx fluidtop
+# Run MSILTOP directly without installation (one-time usage)
+sudo uvx msiltop
 
 # Run with custom options
-sudo uvx fluidtop --interval 2 --color 5 --avg 60
+sudo uvx msiltop --interval 2 --color 5 --avg 60
 
 # Or install as a tool for regular usages
-uv tool install fluidtop@latest -U
-sudo uv tool run fluidtop
+uv tool install msiltop@latest -U
+sudo uv tool run msiltop
 ```
 
 ```bash
-# to update fluidtop
-uv tool install fluidtop@latest -U
+# to update msiltop
+uv tool install msiltop@latest -U
 ```
 
 ```bash
 # Run with custom options
-sudo uvx fluidtop --interval 2 --color 5 --avg 60
+sudo uvx msiltop --interval 2 --color 5 --avg 60
 ```
 
 ### Install from PyPI
 
 ```bash
 # Install with pip
-pip install fluidtop
+pip install msiltop
 
 # Run after installation
-sudo fluidtop
+sudo msiltop
 ```
 
 ## 🚀 Key Features & Capabilities
@@ -78,18 +78,18 @@ sudo fluidtop
 
 ```bash
 # Clone repository
-git clone https://github.com/FluidInference/fluidtop.git
-cd fluidtop
+git clone https://github.com/pratikdevnani/msiltop.git
+cd msiltop
 
 # Install in development mode
 uv sync
-sudo uv run fluidtop
+sudo uv run msiltop
 ```
 
 ## 🎛️ Command Line Options & Configuration
 
 ```bash
-fluidtop [OPTIONS]
+msiltop [OPTIONS]
 
 Options:
   --interval INTERVAL   Display refresh rate in seconds (default: 1.0)
@@ -104,21 +104,21 @@ Options:
 
 ```bash
 # Basic monitoring with 1-second refresh
-sudo fluidtop
+sudo msiltop
 
 # High-frequency monitoring for AI workloads
-sudo fluidtop --interval 0.5 --show_cores
+sudo msiltop --interval 0.5 --show_cores
 
 # Long-term monitoring with 60-second power averaging
-sudo fluidtop --avg 60 --max_count 1000
+sudo msiltop --avg 60 --max_count 1000
 
 # Custom color theme
-sudo fluidtop --color 5
+sudo msiltop --color 5
 ```
 
-## 🔧 How FluidTop Works
+## 🔧 How MSILTOP Works
 
-FluidTop leverages macOS's built-in [`powermetrics`](https://www.unix.com/man-page/osx/1/powermetrics/) utility to access hardware performance counters with minimal system impact. Root privileges are required due to `powermetrics` security requirements.
+MSILTOP leverages macOS's built-in [`powermetrics`](https://www.unix.com/man-page/osx/1/powermetrics/) utility to access hardware performance counters with minimal system impact. Root privileges are required due to `powermetrics` security requirements.
 
 ### Technical Architecture
 
@@ -148,14 +148,14 @@ The original `asitop` provided excellent Apple Silicon monitoring but lacked:
 
 ### Migration from asitop
 
-FluidTop is a drop-in replacement for asitop with identical command-line interface:
+MSILTOP is a drop-in replacement for asitop with identical command-line interface:
 
 ```bash
 # Replace this:
 sudo asitop
 
 # With this:
-sudo fluidtop
+sudo msiltop
 ```
 
 ## 📚 Documentation
@@ -186,26 +186,26 @@ For detailed information, troubleshooting, and frequently asked questions, see o
 
 ### Automated Release Process
 
-FluidTop uses GitHub Actions to automate the entire release process. No manual steps required!
+MSILTOP uses GitHub Actions to automate the entire release process. No manual steps required!
 
 #### 🧪 Development Workflow
 
 ```bash
 # Setup development environment
-git clone https://github.com/FluidInference/fluidtop.git
-cd fluidtop
+git clone https://github.com/pratikdevnani/msiltop.git
+cd msiltop
 uv sync
 
 # Make changes to code
 # Test changes locally
-sudo uv run fluidtop
+sudo uv run msiltop
 
 # Run with development options
-sudo uv run fluidtop --interval 0.5 --show_cores
+sudo uv run msiltop --interval 0.5 --show_cores
 
 # Test build (optional)
 uv build
-sudo uv run fluidtop --help  # Verify build works
+sudo uv run msiltop --help  # Verify build works
 ```
 
 
@@ -217,7 +217,7 @@ sudo uv run fluidtop --help  # Verify build works
 - Long-running sessions may require periodic restart
 
 ### Contributing
-- Report bugs and request features via [GitHub Issues](https://github.com/FluidInference/fluidtop/issues)
+- Report bugs and request features via [GitHub Issues](https://github.com/pratikdevnani/msiltop/issues)
 - Submit pull requests for bug fixes and improvements
 - Improve documentation and examples
 - Test on different Apple Silicon variants
@@ -230,7 +230,7 @@ MIT License - maintaining compatibility with the original asitop project.
 
 This project builds upon the excellent foundation created by [Timothy Liu](https://github.com/tlkh) with the original [asitop](https://github.com/tlkh/asitop) project. We extend our gratitude for creating the groundwork for Apple Silicon performance monitoring.
 
-This project adds to the fluidtop project created by [FluidInference](https://github.com/FluidInference/fluidtop).
+This project adds to the MSILTOP project created by [pratikdevnani](https://github.com/pratikdevnani/msiltop).
 
 ---
 

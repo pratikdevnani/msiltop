@@ -8,7 +8,7 @@ import plistlib
 import json
 
 
-def parse_powermetrics(path='/tmp/fluidtop_powermetrics', timecode="0", tail_bytes=1024 * 512):
+def parse_powermetrics(path='/tmp/msiltop_powermetrics', timecode="0", tail_bytes=1024 * 512):
     try:
         with open(path + timecode, 'rb') as fp:
             fp.seek(0, os.SEEK_END)
@@ -41,7 +41,7 @@ def convert_to_GB(value):
 def run_powermetrics_process(timecode, nice=10, interval=1000):
     #ver, *_ = platform.mac_ver()
     #major_ver = int(ver.split(".")[0])
-    for tmpf in glob.glob("/tmp/fluidtop_powermetrics*"):
+    for tmpf in glob.glob("/tmp/msiltop_powermetrics*"):
         os.remove(tmpf)
     output_file_flag = "-o"
     command = " ".join([
@@ -50,7 +50,7 @@ def run_powermetrics_process(timecode, nice=10, interval=1000):
         "powermetrics",
         "--samplers cpu_power,gpu_power,thermal",
         output_file_flag,
-        "/tmp/fluidtop_powermetrics"+timecode,
+        "/tmp/msiltop_powermetrics"+timecode,
         "-f plist",
         "-i",
         str(interval)
