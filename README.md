@@ -1,6 +1,5 @@
 # MSILTOP - MacOS Performance Monitor for Local AI
 
-[![PyPI version](https://badge.fury.io/py/msiltop.svg)](https://badge.fury.io/py/msiltop)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![macOS](https://img.shields.io/badge/macOS-Monterey%2B-green.svg)](https://www.apple.com/macos/)
 [![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-M1%2FM2%2FM3%2FM4-orange.svg)](https://www.apple.com/mac/)
@@ -8,7 +7,7 @@
 
 **Real-time macOS hardware performance monitoring CLI tool for Apple Silicon Macs (M1/M2/M3/M4+) with AI workload focus**
 
-MSILTOP is a Python-based `nvtop`-inspired command line tool specifically designed for Apple Silicon Macs. This enhanced and actively maintained fork of the original [asitop](https://github.com/tlkh/asitop) project provides comprehensive hardware monitoring with additional features, support for newer Apple Silicon chips, and optimizations for modern terminal emulators including Ghostty.
+MSILTOP is a Python-based `nvtop`-inspired command line tool specifically designed for Apple Silicon Macs. This enhanced and actively maintained fork of the original [fluidtop](https://github.com/FluidInference/fluidtop) project provides comprehensive hardware monitoring with additional features, support for newer Apple Silicon chips, and optimizations for modern terminal emulators including Ghostty.
 
 
 ## 📦 Installation & Usage
@@ -137,15 +136,6 @@ MSILTOP leverages macOS's built-in [`powermetrics`](https://www.unix.com/man-pag
 * **Python:** Python 3.8+ (automatically managed with UV)
 * **Privileges:** Root access required for `powermetrics`
 
-### Why Fork asitop?
-
-The original `asitop` provided excellent Apple Silicon monitoring but lacked:
-
-- **Modern hardware support** - M3, M4+ compatibility
-- **Terminal compatibility** - Ghostty and modern terminal optimization  
-- **AI workload focus** - Machine learning specific monitoring
-- **Active maintenance** - Regular updates and bug fixes
-
 ### Migration from asitop
 
 MSILTOP is a drop-in replacement for asitop with identical command-line interface:
@@ -167,20 +157,6 @@ For detailed information, troubleshooting, and frequently asked questions, see o
 - **Monitoring Details**: Power accuracy, Neural Engine tracking, and more
 - **Troubleshooting**: Common issues and solutions
 - **Migration Guide**: Differences from asitop and compatibility
-
-## 🗺️ Roadmap & Development
-
-### Completed Features
-- ✅ Enhanced hardware support (M1-M4+)
-- ✅ Ghostty terminal optimization  
-- ✅ Improved documentation and user experience
-- ✅ PyPI publishing and UV integration
-
-### In Development
-- 🔄 monitor a specific process/application
-- 🔄 GUI-less monitoring and data collection
-- 🔄 Performance data export capabilities (CSV, JSON)
-- API interface for other Python services
 
 ## 🛠️ Development & Publishing
 
@@ -209,14 +185,7 @@ sudo uv run msiltop --help  # Verify build works
 ```
 
 
-## 🐛 Known Issues & Contributing
-
-### Current Issues
-- Chart height doesn't adapt to terminal height (width works correctly)
-- Plot colors don't always respect theme selection
-- Long-running sessions may require periodic restart
-
-### Contributing
+## 🐛 Contributing
 - Report bugs and request features via [GitHub Issues](https://github.com/pratikdevnani/msiltop/issues)
 - Submit pull requests for bug fixes and improvements
 - Improve documentation and examples
@@ -230,7 +199,7 @@ MIT License - maintaining compatibility with the original asitop project.
 
 This project builds upon the excellent foundation created by [Timothy Liu](https://github.com/tlkh) with the original [asitop](https://github.com/tlkh/asitop) project. We extend our gratitude for creating the groundwork for Apple Silicon performance monitoring.
 
-This project adds to the MSILTOP project created by [pratikdevnani](https://github.com/pratikdevnani/msiltop).
+MSILTOP is a lightweight fork of [FluidInference's fluidtop](https://github.com/FluidInference/fluidtop). The motivation for this fork is to keep the tool lean and focused by removing features that are not necessary, based on my understanding of the core use cases.
 
 ---
 
