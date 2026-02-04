@@ -86,7 +86,7 @@ sudo msiltop
 
 Try these solutions:
 1. Resize your terminal window to be larger
-2. Use a different color theme: `sudo msiltop --color 0`
+2. Use a different theme: `sudo msiltop --theme default`
 3. Clear your terminal: `clear` before running FluidTop
 4. Update to the latest version: `uv tool install msiltop@latest -U`
 

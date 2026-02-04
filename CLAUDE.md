@@ -81,7 +81,7 @@ pip install msiltop
 sudo uv run msiltop
 
 # Run with options
-sudo uv run msiltop --interval 2 --color 5 --avg 60 --show_cores
+sudo uv run msiltop --interval 2 --theme cyan --avg 60 --show_cores
 
 # Alternative: run the module directly
 sudo uv run -m msiltop.msiltop
@@ -99,12 +99,13 @@ sudo msiltop
 msiltop
 
 # With options
-msiltop --interval 2 --color 5 --avg 60 --show_cores
+msiltop --interval 2 --theme cyan --avg 60 --show_cores
 ```
 
 ### Available Command Line Options
 - `--interval INTERVAL`: Display and powermetrics sampling interval (seconds, default: 1)
-- `--color COLOR`: Color theme selection 0-8 (default: 2)
+- `--theme THEME`: Color theme selection (default: cyan)
+  - Options: default, dark, blue, green, red, purple, orange, cyan, magenta
 - `--avg AVG`: Averaging window for power values (seconds, default: 30)
 - `--show_cores`: Enable individual core monitoring display
 - `--max_count COUNT`: Restart powermetrics after N samples (for long-running sessions)

@@ -24,7 +24,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 sudo uvx msiltop
 
 # Run with custom options
-sudo uvx msiltop --interval 2 --color 5 --avg 60
+sudo uvx msiltop --interval 2 --theme cyan --avg 60
 
 # Or install as a tool for regular usages
 uv tool install msiltop@latest -U
@@ -38,7 +38,7 @@ uv tool install msiltop@latest -U
 
 ```bash
 # Run with custom options
-sudo uvx msiltop --interval 2 --color 5 --avg 60
+sudo uvx msiltop --interval 2 --theme cyan --avg 60
 ```
 
 ### Install from PyPI
@@ -92,7 +92,8 @@ msiltop [OPTIONS]
 
 Options:
   --interval INTERVAL   Display refresh rate in seconds (default: 1.0)
-  --color COLOR        Color theme selection 0-8 (default: 2)
+  --theme THEME       Color theme selection (default: cyan)
+                     Options: default, dark, blue, green, red, purple, orange, cyan, magenta
   --avg AVG           Power averaging window in seconds (default: 30)
   --show_cores        Enable individual CPU core monitoring
   --max_count COUNT   Restart powermetrics after N samples (stability)
@@ -111,8 +112,8 @@ sudo msiltop --interval 0.5 --show_cores
 # Long-term monitoring with 60-second power averaging
 sudo msiltop --avg 60 --max_count 1000
 
-# Custom color theme
-sudo msiltop --color 5
+# Custom theme
+sudo msiltop --theme purple
 ```
 
 ## 🔧 How MSILTOP Works
