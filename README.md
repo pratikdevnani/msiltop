@@ -230,6 +230,8 @@ MIT License - maintaining compatibility with the original asitop project.
 
 This project builds upon the excellent foundation created by [Timothy Liu](https://github.com/tlkh) with the original [asitop](https://github.com/tlkh/asitop) project. We extend our gratitude for creating the groundwork for Apple Silicon performance monitoring.
 
+This project adds to the fluidtop project created by [FluidInference](https://github.com/FluidInference/fluidtop).
+
 ---
 
 **Keywords:** Apple Silicon monitoring, M1 M2 M3 M4 performance, macOS system monitor, AI workload tracking, Neural Engine monitoring, GPU utilization, real-time hardware stats, terminal performance tool, powermetrics CLI, asitop alternative
