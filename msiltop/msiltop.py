@@ -1,6 +1,7 @@
 import time
 import click
 import asyncio
+import json
 from collections import deque
 from typing import Optional
 
@@ -410,7 +411,7 @@ class FluidTopApp(App):
     
     # CSS is set dynamically in _apply_theme method
     
-    def __init__(self, interval: int, theme: str, avg: int, max_count: int, show_cores: bool = False):
+    def __init__(self, interval: int, theme: str, avg: int, max_count: int, show_cores: bool = False, thermal_bell: bool = False):
         self.interval = interval
         # Store theme temporarily, don't assign to self.theme yet
         theme_value = theme
@@ -425,6 +426,7 @@ class FluidTopApp(App):
         self.avg = avg
         self.max_count = max_count
         self.show_cores = show_cores
+        self.thermal_bell = thermal_bell
         
         # Initialize metrics storage
         # No longer tracking averages or peaks
@@ -440,6 +442,19 @@ class FluidTopApp(App):
         self.timecode = None
         self.last_timestamp = 0
         self.count = 0
+        self.last_thermal_pressure = None
+        self.session_start = time.time()
+        self.summary_samples = 0
+        self.cpu_usage_sum = 0.0
+        self.gpu_usage_sum = 0.0
+        self.ram_usage_sum = 0.0
+        self.cpu_usage_peak = 0.0
+        self.gpu_usage_peak = 0.0
+        self.ram_usage_peak = 0.0
+        self.cpu_power_peak = 0.0
+        self.gpu_power_peak = 0.0
+        self.ane_power_peak = 0.0
+        self.thermal_pressure_max = "Nominal"
         
         # SoC info
         self.soc_info_dict = get_soc_info()
@@ -587,6 +602,13 @@ class FluidTopApp(App):
         height: 100%;
     }}
     
+    #thermal-label {{
+        width: auto;
+        text-align: right;
+        color: $text;
+        padding: 0 1;
+    }}
+    
     #timestamp-label {{
         width: auto;
         text-align: right;
@@ -617,6 +639,7 @@ class FluidTopApp(App):
                 yield Label("Initializing...", id="system-info-label")
                 # Timestamp on the right
                 with Horizontal(id="controls-buttons"):
+                    yield Label("Thermal Pressure: --", id="thermal-label")
                     yield Label("", id="timestamp-label")
         
         # Usage Charts section
@@ -752,6 +775,7 @@ class FluidTopApp(App):
         # Update title to show both CPU types (smoothed values)
         combined_title = f"E-CPU: {e_cpu_usage}% | P-CPU: {p_cpu_usage}%"
         cpu_combined_chart.update_title(combined_title)
+        combined_cpu_usage = (e_cpu_usage + p_cpu_usage) / 2
         
         # Update GPU usage chart
         gpu_chart = self.query_one("#gpu-usage-chart", UsageChart)
@@ -763,7 +787,7 @@ class FluidTopApp(App):
         # Update RAM usage chart with swap information
         ram_metrics_dict = get_ram_metrics_dict()
         ram_chart = self.query_one("#ram-usage-chart", UsageChart)
-        ram_usage_percent = 100 - ram_metrics_dict["free_percent"]  # Convert from free to used percentage
+        ram_usage_percent = ram_metrics_dict["used_percent"]
         
         # Include swap information in the title
         if ram_metrics_dict["swap_total_GB"] < 0.1:
@@ -773,6 +797,14 @@ class FluidTopApp(App):
         
         ram_chart.update_title(ram_title)
         ram_chart.add_data(ram_usage_percent, render=should_render)
+
+        self.summary_samples += 1
+        self.cpu_usage_sum += combined_cpu_usage
+        self.gpu_usage_sum += gpu_usage
+        self.ram_usage_sum += ram_usage_percent
+        self.cpu_usage_peak = max(self.cpu_usage_peak, combined_cpu_usage)
+        self.gpu_usage_peak = max(self.gpu_usage_peak, gpu_usage)
+        self.ram_usage_peak = max(self.ram_usage_peak, ram_usage_percent)
 
         if self.show_cores:
             await self.update_core_usage_charts(cpu_metrics_dict, should_render)
@@ -817,6 +849,10 @@ class FluidTopApp(App):
         cpu_power_W = cpu_metrics_dict["cpu_W"]
         gpu_power_W = cpu_metrics_dict["gpu_W"]
         ane_power_W = cpu_metrics_dict["ane_W"]
+
+        self.cpu_power_peak = max(self.cpu_power_peak, cpu_power_W)
+        self.gpu_power_peak = max(self.gpu_power_peak, gpu_power_W)
+        self.ane_power_peak = max(self.ane_power_peak, ane_power_W)
         
         # Update energy consumption for each component (watts * seconds = watt-seconds)
         self.total_energy_consumed += package_power_W * self.interval
@@ -866,10 +902,19 @@ class FluidTopApp(App):
         ane_power_chart.add_data(ane_power_percent, render=should_render)
         
         # Update system info label with total power and thermal info
-        thermal_throttle = "no" if thermal_pressure == "Nominal" else "yes"
         total_energy_display = format_energy(self.total_energy_consumed)
-        system_info = f"{self.soc_info_dict['name']} ({self.soc_info_dict['e_core_count']}E+{self.soc_info_dict['p_core_count']}P+{self.soc_info_dict['gpu_core_count']}GPU) | Total: {package_power_W:.1f}W ({total_energy_display}) | Throttle: {thermal_throttle}"
+        system_info = f"{self.soc_info_dict['name']} ({self.soc_info_dict['e_core_count']}E+{self.soc_info_dict['p_core_count']}P+{self.soc_info_dict['gpu_core_count']}GPU) | Total: {package_power_W:.1f}W ({total_energy_display})"
         self.query_one("#system-info-label", Label).update(system_info)
+        self.query_one("#thermal-label", Label).update(f"Thermal Pressure: {thermal_pressure}")
+        thermal_levels = ["Nominal", "Moderate", "Heavy", "Critical"]
+        if thermal_pressure in thermal_levels and thermal_levels.index(thermal_pressure) > thermal_levels.index(self.thermal_pressure_max):
+            self.thermal_pressure_max = thermal_pressure
+        if self.thermal_bell and thermal_pressure != "Nominal" and thermal_pressure != self.last_thermal_pressure:
+            try:
+                print("\a", end="", flush=True)
+            except Exception:
+                pass
+        self.last_thermal_pressure = thermal_pressure
     
     async def update_timestamp(self):
         """Update the timestamp display"""
@@ -885,6 +930,28 @@ class FluidTopApp(App):
                 self.powermetrics_process.terminate()
             except:
                 pass
+        duration_sec = max(0, time.time() - self.session_start)
+        if self.summary_samples > 0:
+            avg_cpu = self.cpu_usage_sum / self.summary_samples
+            avg_gpu = self.gpu_usage_sum / self.summary_samples
+            avg_ram = self.ram_usage_sum / self.summary_samples
+        else:
+            avg_cpu = avg_gpu = avg_ram = 0.0
+        summary = {
+            "duration_sec": round(duration_sec, 1),
+            "avg_cpu_percent": round(avg_cpu, 2),
+            "avg_gpu_percent": round(avg_gpu, 2),
+            "avg_ram_percent": round(avg_ram, 2),
+            "peak_cpu_percent": round(self.cpu_usage_peak, 2),
+            "peak_gpu_percent": round(self.gpu_usage_peak, 2),
+            "peak_ram_percent": round(self.ram_usage_peak, 2),
+            "peak_cpu_w": round(self.cpu_power_peak, 2),
+            "peak_gpu_w": round(self.gpu_power_peak, 2),
+            "peak_ane_w": round(self.ane_power_peak, 2),
+            "total_energy_wh": round(self.total_energy_consumed / 3600, 3),
+            "thermal_pressure_max": self.thermal_pressure_max,
+        }
+        print("\nSession summary:\n" + json.dumps(summary, indent=2))
 
 @click.command()
 @click.option('--interval', type=float, default=1.0,
@@ -897,19 +964,21 @@ class FluidTopApp(App):
               help='Max show count to restart powermetrics')
 @click.option('--show_cores', is_flag=True, default=False,
               help='Show per-core CPU usage charts')
-def main(interval, theme, avg, max_count, show_cores):
+@click.option('--thermal_bell', is_flag=True, default=False,
+              help='Ring terminal bell when thermal throttling is detected')
+def main(interval, theme, avg, max_count, show_cores, thermal_bell):
     """msiltop: Performance monitoring CLI tool for Apple Silicon"""
-    return _main_logic(interval, theme, avg, max_count, show_cores=show_cores)
+    return _main_logic(interval, theme, avg, max_count, show_cores=show_cores, thermal_bell=thermal_bell)
 
 
-def _main_logic(interval, theme, avg, max_count, show_cores=False):
+def _main_logic(interval, theme, avg, max_count, show_cores=False, thermal_bell=False):
     """Main logic using Textual app"""
     print("\nMSILTOP - Performance monitoring CLI tool for Apple Silicon")
     print("Get help at `https://github.com/pratikdevnani/msiltop`")
     print("P.S. You are recommended to run MSILTOP with `sudo msiltop`\n")
     
     # Create and run the Textual app
-    app = FluidTopApp(interval, theme, avg, max_count, show_cores=show_cores)
+    app = FluidTopApp(interval, theme, avg, max_count, show_cores=show_cores, thermal_bell=thermal_bell)
     try:
         app.run()
     except KeyboardInterrupt:
